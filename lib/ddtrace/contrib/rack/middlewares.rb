@@ -1,6 +1,7 @@
 require 'ddtrace/ext/app_types'
 require 'ddtrace/ext/http'
 require 'ddtrace/propagation/http_propagator'
+require 'ddtrace/contrib/rack/quantize'
 
 module Datadog
   module Contrib
@@ -104,7 +105,8 @@ module Datadog
             request_span.set_tag(Datadog::Ext::HTTP::METHOD, env['REQUEST_METHOD'])
           end
           if request_span.get_tag(Datadog::Ext::HTTP::URL).nil?
-            request_span.set_tag(Datadog::Ext::HTTP::URL, url)
+            options = Datadog.configuration[:rack][:quantize]
+            request_span.set_tag(Datadog::Ext::HTTP::URL, Quantize.format_url(url, options))
           end
           if request_span.get_tag(Datadog::Ext::HTTP::BASE_URL).nil?
             request_obj = ::Rack::Request.new(env)

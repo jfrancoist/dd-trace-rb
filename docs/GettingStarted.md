@@ -142,8 +142,22 @@ Where `options` is an optional `Hash` that accepts the following parameters:
 | ``service_name`` | Service name used when tracing application requests | rack |
 | ``distributed_tracing`` | Enables [distributed tracing](#Distributed_Tracing) so that this service trace is connected with a trace of another service if tracing headers are received | `false` |
 | ``middleware_names`` | Enable this if you want to use the middleware classes as the resource names for `rack` spans. Must provide the ``application`` option with it. | ``false`` |
+| ``quantize`` | Hash containing options for quantization. May include `:query` as a Hash. `:query` may contain `:show` with an Array of keys to not quantize (or `:all` to skip quantization), or `:exclude` with Array of keys to exclude entirely. | {} |
 | ``application`` | Your Rack application. Necessary for enabling middleware resource names. | ``nil`` |
 | ``tracer`` | A ``Datadog::Tracer`` instance used to instrument the application. Usually you don't need to set that. | ``Datadog.tracer`` |
+
+Quantization configuration examples:
+
+```
+Datadog.configure do |c|
+  # Show values for any query string parameter matching 'category_id' exactly
+  c.use :rack, quantize: { query: { show: ['category_id'] } }
+  # Show all values for all query string parameters
+  c.use :rack, quantize: { query: { show: :all } }
+  # Totally exclude any query string parameter matching 'sort_by' exactly
+  c.use :rack, quantize: { query: { exclude: ['sort_by'] } }
+end
+```
 
 ## Other libraries
 

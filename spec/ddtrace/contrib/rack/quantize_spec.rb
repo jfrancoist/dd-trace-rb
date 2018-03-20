@@ -10,20 +10,40 @@ RSpec.describe Datadog::Contrib::Rack::Quantize do
     let(:options) { {} }
 
     context 'given a URL' do
-      context 'with a query string' do
-        let(:url) { 'http://example.com/path?foo=foo' }
-        it { is_expected.to eq('http://example.com/path?foo') }
+      let(:url) { 'http://example.com/path?category_id=1&sort_by=asc#featured' }
+
+      context 'default behavior' do
+        it { is_expected.to eq('http://example.com/path?category_id&sort_by') }
       end
 
-      context 'with a query string that gets excluded' do
-        let(:url) { 'http://example.com/path?foo=foo' }
-        let(:options) { { query: { exclude: ['foo'] } } }
+      context 'default behavior for an array' do
+        let(:url) { 'http://example.com/path?categories[]=1&categories[]=2' }
+        it { is_expected.to eq('http://example.com/path?categories[]') }
+      end
+
+      context 'with query: show: value' do
+        let(:options) { { query: { show: ['category_id'] } } }
+        it { is_expected.to eq('http://example.com/path?category_id=1&sort_by') }
+      end
+
+      context 'with query: show: :all' do
+        let(:options) { { query: { show: :all } } }
+        it { is_expected.to eq('http://example.com/path?category_id=1&sort_by=asc') }
+      end
+
+      context 'with query: exclude: value' do
+        let(:options) { { query: { exclude: ['sort_by'] } } }
+        it { is_expected.to eq('http://example.com/path?category_id') }
+      end
+
+      context 'with query: exclude: :all' do
+        let(:options) { { query: { exclude: :all } } }
         it { is_expected.to eq('http://example.com/path') }
       end
 
-      context 'with a fragment' do
-        let(:url) { 'http://example.com/path#foo' }
-        it { is_expected.to eq('http://example.com/path#foo') }
+      context 'with show: :all' do
+        let(:options) { { fragment: :show } }
+        it { is_expected.to eq('http://example.com/path?category_id&sort_by#featured') }
       end
     end
   end

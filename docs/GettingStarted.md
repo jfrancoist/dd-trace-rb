@@ -146,6 +146,7 @@ Where `options` is an optional `Hash` that accepts the following parameters:
 | ``quantize.query`` | Hash containing options for query portion of URL quantization. May include `:show` or `:exclude`. See options below. Option must be nested inside the `quantize` option. | {} |
 | ``quantize.query.show`` | Defines which values should always be shown. May be an Array of strings, or `:all` to show all values. Option must be nested inside the `query` option. | {} |
 | ``quantize.query.exclude`` | Defines which values should be removed entirely. May be an Array of strings, or `:all` to remove the query string entirely. Option must be nested inside the `query` option. | {} |
+| ``quantize.fragment`` | Defines behavior for URL fragments. May be `:show` to show URL fragments. Is `nil` by default, which means fragments are removed. Option must be nested inside the `quantize` option. | nil |
 | ``application`` | Your Rack application. Necessary for enabling middleware resource names. | ``nil`` |
 | ``tracer`` | A ``Datadog::Tracer`` instance used to instrument the application. Usually you don't need to set that. | ``Datadog.tracer`` |
 

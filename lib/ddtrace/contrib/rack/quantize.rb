@@ -16,6 +16,9 @@ module Datadog
               query = format_query_string(uri.query, options[:query])
               uri.query = (!query.nil? && query.empty? ? nil : query)
             end
+
+            # Remove any URI framents
+            uri.fragment = nil unless options[:fragment] == :show
           end.to_s
         end
 

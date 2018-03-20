@@ -24,6 +24,9 @@ module Datadog
           options[:show] = options[:show] || []
           options[:exclude] = options[:exclude] || []
 
+          # Short circuit if query string is meant to exclude everything
+          return '' if options[:exclude] == :all
+
           CGI.parse(query_string).collect do |key, value|
             if options[:exclude].include?(key)
               nil

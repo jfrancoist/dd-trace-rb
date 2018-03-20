@@ -61,7 +61,7 @@ RSpec.describe Datadog::Contrib::Rack::Quantize do
         end
       end
 
-      context 'and a show: all option' do
+      context 'and a show: :all option' do
         let(:query_string) { 'foo=foo&bar=bar' }
         let(:options) { { show: :all } }
         it { is_expected.to eq(query_string) }
@@ -107,6 +107,12 @@ RSpec.describe Datadog::Contrib::Rack::Quantize do
             it { is_expected.to eq('users[][id]=1&users[][id]=2&users[][name]') }
           end
         end
+      end
+
+      context 'and an exclude: :all option' do
+        let(:query_string) { 'foo=foo&bar=bar' }
+        let(:options) { { exclude: :all } }
+        it { is_expected.to eq('') }
       end
 
       context 'and an exclude option' do

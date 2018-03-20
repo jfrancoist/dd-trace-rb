@@ -142,7 +142,10 @@ Where `options` is an optional `Hash` that accepts the following parameters:
 | ``service_name`` | Service name used when tracing application requests | rack |
 | ``distributed_tracing`` | Enables [distributed tracing](#Distributed_Tracing) so that this service trace is connected with a trace of another service if tracing headers are received | `false` |
 | ``middleware_names`` | Enable this if you want to use the middleware classes as the resource names for `rack` spans. Must provide the ``application`` option with it. | ``false`` |
-| ``quantize`` | Hash containing options for quantization. May include `:query` as a Hash. `:query` may contain `:show` with an Array of keys to not quantize (or `:all` to skip quantization), or `:exclude` with Array of keys to exclude entirely. | {} |
+| ``quantize`` | Hash containing options for quantization. May include `:query` or `:fragment`. | {} |
+| ``quantize.query`` | Hash containing options for query portion of URL quantization. May include `:show` or `:exclude`. See options below. Option must be nested inside the `quantize` option. | {} |
+| ``quantize.query.show`` | Defines which values should always be shown. May be an Array of strings, or `:all` to show all values. Option must be nested inside the `query` option. | {} |
+| ``quantize.query.exclude`` | Defines which values should be removed entirely. May be an Array of strings, or `:all` to remove the query string entirely. Option must be nested inside the `query` option. | {} |
 | ``application`` | Your Rack application. Necessary for enabling middleware resource names. | ``nil`` |
 | ``tracer`` | A ``Datadog::Tracer`` instance used to instrument the application. Usually you don't need to set that. | ``Datadog.tracer`` |
 
